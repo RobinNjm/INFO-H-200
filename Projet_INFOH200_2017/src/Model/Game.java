@@ -12,7 +12,7 @@ public class Game implements DemisableObserver{
 	private Window window;
 	private int sizeMap = Map.getSizeMap();
 	private int numberOfBreakableBlocks = 50;
-	public int numberOfMonsters = 1;
+	public int numberOfMonsters = 10;
 	private boolean whichOne = true;
 	
 	public Game(Window window){
@@ -39,14 +39,14 @@ public class Game implements DemisableObserver{
 			objects.add(block);
 		}
 		
-		for (int i = 0; i<10; i++){
+		for (int i = 0; i<2; i++){
 			int x1 = rand.nextInt(sizeMap - 2) + 1;
 			int y1 = rand.nextInt(sizeMap - 2) + 1;
 			InstantHeal heal = new InstantHeal(x1, y1, this);
 			objects.add(heal);
 		}
 		
-		for (int i = 0; i<10; i++){
+		for (int i = 0; i<2; i++){
 			int x1 = rand.nextInt(sizeMap - 2) + 1;
 			int y1 = rand.nextInt(sizeMap - 2) + 1;
 			HealOverTime heal = new HealOverTime(x1, y1, this);
@@ -62,7 +62,7 @@ public class Game implements DemisableObserver{
 		}
 		
 		
-		window.setGameObjects(this.getGameObjects());
+		window.update(this.getGameObjects());
 		notifyView();
 	}
 	
@@ -93,16 +93,29 @@ public class Game implements DemisableObserver{
 	
 	
 	protected void notifyView(){
-		window.update();
+		window.update(this.objects);
 	}
 
 	public ArrayList<GameObject> getGameObjects(){
 		return this.objects;
 	}
 	
-	public void monsterDestroyed(){
+	public void monsterDestroyed(int posX, int posY){
 		this.numberOfMonsters = this.numberOfMonsters - 1;
 		window.setNumberOfMonsters(this.numberOfMonsters);
+		loot(posX, posY);
+	}
+	
+	private void loot(int posX, int posY){
+		Random rand = new Random();
+		int count = rand.nextInt(5);
+		if (count == 0 || count == 1){
+			InstantHeal heal = new InstantHeal(posX, posY, this);
+			objects.add(heal);
+		} else if (count == 2){
+			HealOverTime heal = new HealOverTime(posX, posY, this);
+			objects.add(heal);
+		}
 	}
 	
 	public int getNumberOfMonsters(){

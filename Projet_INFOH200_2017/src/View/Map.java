@@ -105,7 +105,7 @@ public class Map extends JPanel {
 		g.drawString("Bombs: " + player.getCountBomb(), 705, 400);
 	}
 	
-	public void setObjects(ArrayList<GameObject> objects){
+	public synchronized void setObjects(ArrayList<GameObject> objects){
 		this.objects = objects;
 	}
 	

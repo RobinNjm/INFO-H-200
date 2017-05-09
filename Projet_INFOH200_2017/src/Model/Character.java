@@ -53,7 +53,7 @@ public abstract class Character extends GameObject implements DamageableObserver
 		this.lifes = this.lifes - hurt;
 		if(this.lifes == 0){
 			if (this instanceof Monster){
-				game.monsterDestroyed();
+				game.monsterDestroyed(this.posX, this.posY);
 			}else if (this instanceof Player){
 				game.gameOver();
 			}

@@ -22,19 +22,13 @@ public class Window {
 	    window.setVisible(true);							//visibilité de la fenêtre
 	    
 	}
-
-	
-	synchronized public void setGameObjects(ArrayList<GameObject> objects){
-		/* Sert à mettre la map à jour une fois que la liste d'objets a changé*/
-		this.map.setObjects(objects);
-		this.map.redraw();
-	}
 	
 	public void setNumberOfMonsters(int num){
 		map.numberOfMonsters = num;
 	}
 	
-	public void update(){
+	public void update(ArrayList<GameObject> objects){
+		this.map.setObjects(objects);
 		this.map.redraw();
 	}
 	
