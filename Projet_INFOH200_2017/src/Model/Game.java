@@ -12,26 +12,40 @@ public class Game implements DemisableObserver{
 	private Window window;
 	private int sizeMap = Map.getSizeMap();
 	private int numberOfBreakableBlocks = 50;
-	private int numberOfMonsters = 5;
+	private int initNumberOfMonsters = 5;
+	private int numberOfMonsters = initNumberOfMonsters;
 	private boolean whichOne = true;
+	private int monsterAttack = 0;
+	private int monsterLifes = 0;
 	
 	
 	
 	public Game(Window window){
 		this.window = window;
-		window.setNumberOfMonsters(this.numberOfMonsters);
-
+		
 		// Creating one Player at position (1,1)
 		objects.add(new Player(1,1,5,1, this));
 		
-		// Map building 
+		mapBuild();
+	}
+	
+	public void mapBuild(){
+		
+		Player player = (Player) objects.get(0);
+		this.objects.clear();
+		this.objects.add(player);
+		
+		this.objects.addAll(player.inventory.getInventoryObjects());
+		
 		for(int i = 0; i < sizeMap; i++){
 			objects.add(new Wall(i,0));
 			objects.add(new Wall(0,i));
 			objects.add(new Wall(i, sizeMap-1));
 			objects.add(new Wall(sizeMap-1, i));
 		}
+		
 		Random rand = new Random();
+		
 		for(int i = 0; i < numberOfBreakableBlocks; i++){
 			int x = rand.nextInt(sizeMap-2) + 1;
 			int y = rand.nextInt(sizeMap-2) + 1;
@@ -40,20 +54,24 @@ public class Game implements DemisableObserver{
 			objects.add(block);
 		}
 		
+		this.initNumberOfMonsters += 5;
+		this.numberOfMonsters = this.initNumberOfMonsters + 5;
+		this.monsterAttack += 1;
+		this.monsterLifes += 1;
+		window.setNumberOfMonsters(this.numberOfMonsters);
+		
 		for (int i = 0; i < numberOfMonsters; i++){
 			int x = rand.nextInt(sizeMap-2) + 1;
 			int y = rand.nextInt(sizeMap-2) + 1;
-			Monster monster = new Monster(x, y, 1, 1, this);
+			Monster monster = new Monster(x, y, monsterLifes, monsterAttack, this);
 			monster.demisableAttach(this);
 			objects.add(monster);
 		}
-		
-		
+				
+				
 		window.update(this.getGameObjects());
 		notifyView();
 	}
-	
-	public
 	
 	public synchronized void dropBomb(int playerNumber){
 		Player player = ((Player) objects.get(playerNumber));
@@ -92,7 +110,11 @@ public class Game implements DemisableObserver{
 	public void monsterDestroyed(int posX, int posY){
 		this.numberOfMonsters = this.numberOfMonsters - 1;
 		window.setNumberOfMonsters(this.numberOfMonsters);
-		loot(posX, posY);
+		if (this.numberOfMonsters == 0){
+			mapBuild();
+		} else{
+			loot(posX, posY);
+		}
 		
 	}
 	

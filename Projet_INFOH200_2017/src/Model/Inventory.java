@@ -14,6 +14,10 @@ public class Inventory {
 		this.game = game;
 	}
 	
+	public ArrayList<InventoryItem> getInventoryObjects(){
+		return this.inventoryObjects;
+	}
+	
 	public void addItem(InventoryItem item){
 		if (inventoryObjects.size() < size){
 			inventoryObjects.add(item);
