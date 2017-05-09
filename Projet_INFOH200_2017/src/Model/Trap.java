@@ -8,7 +8,7 @@ public class Trap extends UnbreakableBlock{
 		super(x, y, 9);
 	}
 	
-	public void hurt(Player player){
+	public synchronized void hurt(Player player){
 		if (player.isAtPosition(this.posX, this.posY)){
 			player.removeLifes(hurtValue);
 			try {

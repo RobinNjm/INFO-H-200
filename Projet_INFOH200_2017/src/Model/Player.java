@@ -14,7 +14,7 @@ public class Player extends Character implements DemisableObserver{
 		this.inventory = new Inventory(this, game);
 	}
 	
-	public Bomb dropBomb(){
+	public synchronized Bomb dropBomb(){
 		if(this.countBomb > 0){
 			this.countBomb = this.countBomb - 1;
 			Bomb bomb = new Bomb(posX, posY);
@@ -39,8 +39,7 @@ public class Player extends Character implements DemisableObserver{
 	}
 	
 	public synchronized void simpleAttack(int x, int y){
-		ArrayList<GameObject> objects = game.getGameObjects();
-		for(GameObject object : objects){
+		for(GameObject object : game.getGameObjects()){
 			if (object instanceof Monster){
 				if (object.isAtPosition(this.posX + x, this.posY + y)){
 					((Monster) object).removeLifes(attackValue);

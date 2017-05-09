@@ -27,7 +27,7 @@ public class HurtingCase extends GameObject implements Runnable, Demisable, Dama
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 			try {
 				Thread.sleep(this.duration);
 				this.demisableNotifyObserver();

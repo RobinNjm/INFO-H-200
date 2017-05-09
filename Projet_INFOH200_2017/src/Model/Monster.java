@@ -57,7 +57,7 @@ public class Monster extends Character implements Runnable, DamageableObserver, 
 			}
 	}
 	
-	public int moveMonster(int deltaX, int deltaY, Player player){
+	public synchronized int moveMonster(int deltaX, int deltaY, Player player){
 		int interval = intervalRandom;
 		
 		if (Math.abs(deltaX) < sightDistance && Math.abs(deltaY) < sightDistance){

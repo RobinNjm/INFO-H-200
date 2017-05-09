@@ -20,7 +20,7 @@ public class Bomb extends Item implements Runnable, Damageable, DamageableObserv
 	}
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
 		int count = 0;
 		while(!this.detonated  && count < this.duration/10.0){
 			try {
@@ -41,7 +41,7 @@ public class Bomb extends Item implements Runnable, Damageable, DamageableObserv
 	}
 
 	@Override
-	synchronized public void demisableNotifyObserver() {
+	public synchronized void demisableNotifyObserver() {
 		ArrayList<GameObject> loot = new ArrayList<GameObject>();
 		int range = this.getRange();
 		int x = this.getPosX();

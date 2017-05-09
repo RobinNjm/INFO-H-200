@@ -7,18 +7,19 @@ import java.util.Random;
 import View.Window;
 
 public class Game implements DemisableObserver{
-	public ArrayList<GameObject> objects = new ArrayList<GameObject>();
+	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	
 	private Window window;
 	private int sizeMap = Map.getSizeMap();
 	private int numberOfBreakableBlocks = 50;
-	public int numberOfMonsters = 10;
+	private int numberOfMonsters = 5;
 	private boolean whichOne = true;
+	
+	
 	
 	public Game(Window window){
 		this.window = window;
 		window.setNumberOfMonsters(this.numberOfMonsters);
-
 
 		// Creating one Player at position (1,1)
 		objects.add(new Player(1,1,5,1, this));
@@ -39,20 +40,6 @@ public class Game implements DemisableObserver{
 			objects.add(block);
 		}
 		
-		for (int i = 0; i<2; i++){
-			int x1 = rand.nextInt(sizeMap - 2) + 1;
-			int y1 = rand.nextInt(sizeMap - 2) + 1;
-			InstantHeal heal = new InstantHeal(x1, y1, this);
-			objects.add(heal);
-		}
-		
-		for (int i = 0; i<2; i++){
-			int x1 = rand.nextInt(sizeMap - 2) + 1;
-			int y1 = rand.nextInt(sizeMap - 2) + 1;
-			HealOverTime heal = new HealOverTime(x1, y1, this);
-			objects.add(heal);
-		}
-		
 		for (int i = 0; i < numberOfMonsters; i++){
 			int x = rand.nextInt(sizeMap-2) + 1;
 			int y = rand.nextInt(sizeMap-2) + 1;
@@ -65,6 +52,8 @@ public class Game implements DemisableObserver{
 		window.update(this.getGameObjects());
 		notifyView();
 	}
+	
+	public
 	
 	public synchronized void dropBomb(int playerNumber){
 		Player player = ((Player) objects.get(playerNumber));
@@ -104,9 +93,10 @@ public class Game implements DemisableObserver{
 		this.numberOfMonsters = this.numberOfMonsters - 1;
 		window.setNumberOfMonsters(this.numberOfMonsters);
 		loot(posX, posY);
+		
 	}
 	
-	private void loot(int posX, int posY){
+	private synchronized void loot(int posX, int posY){
 		Random rand = new Random();
 		int count = rand.nextInt(5);
 		if (count == 0 || count == 1){
@@ -140,7 +130,7 @@ public class Game implements DemisableObserver{
 	}
 	
 	@Override
-	synchronized public void demise(Demisable ps, ArrayList<GameObject> loot) {
+	public synchronized void demise(Demisable ps, ArrayList<GameObject> loot) {
 		objects.remove(ps);
 		if(loot != null){
 			objects.addAll(loot);
@@ -162,7 +152,7 @@ public class Game implements DemisableObserver{
 		player.pick(objects);
 	}
 	
-	public void dropItem(int playerNumber, int selectedItem){
+	public synchronized void dropItem(int playerNumber, int selectedItem){
 		Player player = ((Player) objects.get(playerNumber));
 		player.dropItem(selectedItem);
 	}

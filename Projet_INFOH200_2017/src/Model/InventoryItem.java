@@ -20,7 +20,7 @@ public abstract class InventoryItem extends Item{
 	
 	public abstract boolean isInstant();
 	
-	public void drop(){
-		game.objects.remove(this);
+	public synchronized void drop(){
+		game.getGameObjects().remove(this);
 	}
 }

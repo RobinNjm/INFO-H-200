@@ -12,14 +12,14 @@ public class HealOverTime extends InventoryItem implements Runnable {
 		super(posX, posY, 4, game);
 	}
 	
-	public void use(Player player, ArrayList<InventoryItem> inUseObjects){
+	public synchronized void use(Player player, ArrayList<InventoryItem> inUseObjects){
 		this.inUseObjects = inUseObjects;
 		player.addLifes(1);
 		this.player = player;
 		new Thread((Runnable) this).start();
 	}
 	
-	public void run(){
+	public synchronized void run(){
 		this.setPosition(37, 1);
 		for (int i = 1 ; i<healValue ; i++){
 			try {
