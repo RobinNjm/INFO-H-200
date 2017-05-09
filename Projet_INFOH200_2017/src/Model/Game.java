@@ -54,8 +54,8 @@ public class Game implements DemisableObserver{
 			objects.add(block);
 		}
 		
-		this.initNumberOfMonsters += 5;
 		this.numberOfMonsters = this.initNumberOfMonsters + 5;
+		this.initNumberOfMonsters += 5;
 		this.monsterAttack += 1;
 		this.monsterLifes += 1;
 		window.setNumberOfMonsters(this.numberOfMonsters);
