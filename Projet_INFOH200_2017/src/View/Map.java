@@ -101,12 +101,6 @@ public class Map extends JPanel {
 				g.drawImage(breakableBlock, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 8){
 				g.drawImage(wall, x*35*20/sizeMap, y*35*20/sizeMap, null);
-			}else if(color == 9){
-				g.setColor(Color.WHITE);
-			}else if(color == 10){
-				g.setColor(Color.GREEN);
-			}else if(color == 11){
-				g.setColor(Color.YELLOW);
 			}else if(color == 12){
 				g.drawImage(explosion, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}
