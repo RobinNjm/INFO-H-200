@@ -10,13 +10,14 @@ public class Game implements DemisableObserver{
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	
 	private Window window;
-	private int sizeMap = Map.getSizeMap();
+	protected int sizeMap = Map.getSizeMap();
 	private int numberOfBreakableBlocks = 50;
-	private int initNumberOfMonsters = 5;
+	private int initNumberOfMonsters = 0;
 	private int numberOfMonsters = initNumberOfMonsters;
 	private boolean whichOne = true;
 	private int monsterAttack = 0;
 	private int monsterLifes = 0;
+	private int levelNumber = 0;
 	
 	
 	
@@ -35,6 +36,15 @@ public class Game implements DemisableObserver{
 		this.objects.clear();
 		this.objects.add(player);
 		
+		player.setPosition(1, 1);
+		
+		this.levelNumber += 1;
+		window.map.updateLevelNumber();
+		
+		if(this.levelNumber != 1){
+			window.nextLevel(this.levelNumber);
+		}
+		
 		this.objects.addAll(player.inventory.getInventoryObjects());
 		
 		for(int i = 0; i < sizeMap; i++){
@@ -43,13 +53,11 @@ public class Game implements DemisableObserver{
 			objects.add(new Wall(i, sizeMap-1));
 			objects.add(new Wall(sizeMap-1, i));
 		}
-		
-		Random rand = new Random();
-		
+				
 		for(int i = 0; i < numberOfBreakableBlocks; i++){
-			int x = rand.nextInt(sizeMap-2) + 1;
-			int y = rand.nextInt(sizeMap-2) + 1;
-			BreakableBlock block = new BreakableBlock(x,y);
+			ArrayList<Integer> list;
+			list = generatePosition();
+			BreakableBlock block = new BreakableBlock(list.get(0),list.get(1));
 			block.demisableAttach(this);
 			objects.add(block);
 		}
@@ -61,9 +69,9 @@ public class Game implements DemisableObserver{
 		window.setNumberOfMonsters(this.numberOfMonsters);
 		
 		for (int i = 0; i < numberOfMonsters; i++){
-			int x = rand.nextInt(sizeMap-2) + 1;
-			int y = rand.nextInt(sizeMap-2) + 1;
-			Monster monster = new Monster(x, y, monsterLifes, monsterAttack, this);
+			ArrayList<Integer> list;
+			list = restrictedGeneratePosition();
+			Monster monster = new Monster(list.get(0),list.get(1), monsterLifes, monsterAttack, this);
 			monster.demisableAttach(this);
 			objects.add(monster);
 		}
@@ -107,11 +115,60 @@ public class Game implements DemisableObserver{
 		return this.objects;
 	}
 	
+	private ArrayList<Integer> generatePosition(){
+		Random rand = new Random();
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		int x = 0;
+		int y = 0;
+		do{
+			x = rand.nextInt(sizeMap-2) + 1;
+			y = rand.nextInt(sizeMap-2) + 1;
+		} while (!caseIsFree(x, y));
+		list.add(x);
+		list.add(y);
+		return list;
+	}
+	
+	private ArrayList<Integer> restrictedGeneratePosition(){
+		Random rand = new Random();
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		int x = 0;
+		int y = 0;
+		do{
+			x = rand.nextInt(sizeMap-7) + 1;
+			y = rand.nextInt(sizeMap-7) + 1;
+		} while (!caseIsFree(x, y));
+		list.add(x + 5);
+		list.add(y + 5);
+		return list;
+	}
+	
+	public synchronized boolean caseIsFree(int x, int y){
+		boolean obstacle = false;
+		for(GameObject object : objects){
+			if(object.isAtPosition(x, y)){
+				obstacle = object.isObstacle();
+			}
+			if(obstacle){
+				break;
+			}
+		}
+		return !obstacle;
+	}
+	
+	public void teleporterCreation(){
+		ArrayList<Integer> list;
+		list = generatePosition();
+		TeleporterItem chimichanga = new TeleporterItem(list.get(0), list.get(1), this);
+		objects.add(chimichanga);
+		notifyView();
+	}
+	
 	public void monsterDestroyed(int posX, int posY){
 		this.numberOfMonsters = this.numberOfMonsters - 1;
 		window.setNumberOfMonsters(this.numberOfMonsters);
 		if (this.numberOfMonsters == 0){
-			mapBuild();
+			teleporterCreation();
 		} else{
 			loot(posX, posY);
 		}
@@ -127,6 +184,9 @@ public class Game implements DemisableObserver{
 		} else if (count == 2){
 			HealOverTime heal = new HealOverTime(posX, posY, this);
 			objects.add(heal);
+		} else if (count == 3){
+			Bomb bomb = new Bomb(posX, posY, this);
+			objects.add(bomb);
 		}
 	}
 	
@@ -147,7 +207,7 @@ public class Game implements DemisableObserver{
 		
 	}
 	
-	public void swapAttack(int playerNumber){
+	public void swapAttack(){
 		this.whichOne = !this.whichOne;
 	}
 	
@@ -169,7 +229,7 @@ public class Game implements DemisableObserver{
 		window.gameOver();
 	}
 	
-	public void pickItem(int playerNumber){
+	public synchronized void pickItem(int playerNumber){
 		Player player = ((Player) objects.get(playerNumber));
 		player.pick(objects);
 	}
@@ -179,7 +239,7 @@ public class Game implements DemisableObserver{
 		player.dropItem(selectedItem);
 	}
 	
-	public void useItem(int playerNumber, int selectedItem){
+	public synchronized void useItem(int playerNumber, int selectedItem){
 		Player player = ((Player) objects.get(playerNumber));
 		player.useItem(selectedItem);
 	}

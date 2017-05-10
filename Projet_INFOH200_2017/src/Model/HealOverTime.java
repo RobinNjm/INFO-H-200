@@ -20,7 +20,7 @@ public class HealOverTime extends InventoryItem implements Runnable {
 	}
 	
 	public synchronized void run(){
-		this.setPosition(37, 1);
+		this.setPosition(game.sizeMap + 7, 1);
 		for (int i = 1 ; i<healValue ; i++){
 			try {
 				Thread.sleep(5000);

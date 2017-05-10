@@ -2,14 +2,14 @@ package Model;
 
 import java.util.ArrayList;
 
-public class HurtingCase extends GameObject implements Runnable, Demisable, Damageable{
+public class Explosion extends GameObject implements Runnable, Demisable, Damageable{
 	
 	private int duration;
 	private ArrayList<DemisableObserver> observers = new ArrayList<DemisableObserver>();
 
 
-	public HurtingCase(int x, int y, int duration) {
-		super(x, y, 6);
+	public Explosion(int x, int y, int duration) {
+		super(x, y, 12);
 		this.duration = duration;
 	}
 

@@ -19,11 +19,13 @@ public class Inventory {
 	}
 	
 	public void addItem(InventoryItem item){
-		if (inventoryObjects.size() < size){
+		if (inventoryObjects.size() < size && !(item instanceof TeleporterItem)){
 			inventoryObjects.add(item);
-			item.setPosition(32, inventoryObjects.size());	//ligne 32 dédiée à l'inventaire
+			item.setPosition(game.sizeMap + 2, inventoryObjects.size());	//colonne dédiée à l'inventaire
 			
 			game.notifyView();
+		} else if (item instanceof TeleporterItem){
+			game.mapBuild();
 		} else {
 			System.out.println("Inventaire plein");
 		}
@@ -40,7 +42,7 @@ public class Inventory {
 				
 				int count = 1;
 				for (InventoryItem object : inventoryObjects){
-					object.setPosition(32, count);
+					object.setPosition(game.sizeMap + 2, count);
 					count++;
 				}
 			} else if (inUseObjects.size() == 0){
@@ -52,7 +54,7 @@ public class Inventory {
 				
 				int count = 1;
 				for (InventoryItem object : inventoryObjects){
-					object.setPosition(32, count);
+					object.setPosition((game.sizeMap + 2), count);
 					count++;
 				}
 			}
@@ -71,7 +73,7 @@ public class Inventory {
 			
 			int count = 1;
 			for (InventoryItem object : inventoryObjects){
-				object.setPosition(32, count);
+				object.setPosition((game.sizeMap + 2), count);
 				count++;
 			}
 			

@@ -50,7 +50,7 @@ public class Keyboard implements KeyListener{
 				game.attack(0, -1, player1);
 				break;
 			/*case KeyEvent.VK_BACK_SPACE:
-				game.swapAttack(player1);
+				game.swapAttack();
 				break;*/
 			case KeyEvent.VK_ADD:
 				game.pickItem(player1);

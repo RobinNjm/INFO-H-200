@@ -11,8 +11,8 @@ public class Bomb extends Item implements Runnable, Damageable, DamageableObserv
 	private ArrayList<DamageableObserver> damageableObservers = new ArrayList<DamageableObserver>();
 	
 	
-	public Bomb (int x, int y){
-		super(x, y, 6);
+	public Bomb (int x, int y, Game game){
+		super(x, y, 6, game);
 	}
 	
 	public int getRange(){
@@ -48,7 +48,7 @@ public class Bomb extends Item implements Runnable, Damageable, DamageableObserv
 		int y = this.getPosY();
 		for(int i = x-range; i <= x+range; i++){
 			for(int j = y-range; j <= y+range; j++){
-				HurtingCase cas = new HurtingCase(i,j,250);
+				Explosion cas = new Explosion(i,j,250);
 				Thread thread = new Thread(cas);
 				thread.start();
 				for(DemisableObserver observer : demisableObservers){

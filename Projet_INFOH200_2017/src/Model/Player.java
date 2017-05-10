@@ -17,7 +17,7 @@ public class Player extends Character implements DemisableObserver{
 	public synchronized Bomb dropBomb(){
 		if(this.countBomb > 0){
 			this.countBomb = this.countBomb - 1;
-			Bomb bomb = new Bomb(posX, posY);
+			Bomb bomb = new Bomb(posX, posY, game);
 			bomb.demisableAttach(this);
 			Thread thread = new Thread(bomb);
 			thread.start();
@@ -52,6 +52,9 @@ public class Player extends Character implements DemisableObserver{
 		for (GameObject item : objects){
 			if (item instanceof InventoryItem && item.isAtPosition(this.posX, this.posY)){
 				inventory.addItem((InventoryItem) item);
+			} else if (item instanceof Item && item.isAtPosition(this.posX, this.posY)){
+				this.countBomb += 1;
+				((Item) item).drop();
 			}
 		}
 	}
@@ -62,6 +65,11 @@ public class Player extends Character implements DemisableObserver{
 	
 	public void useItem(int selectedItem){
 		inventory.useItem(selectedItem);
+	}
+	
+	public void setPosition(int x, int y){
+		this.posX = x;
+		this.posY = y;
 	}
 
 	@Override

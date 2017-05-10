@@ -36,9 +36,8 @@ public abstract class Character extends GameObject implements DamageableObserver
 	}
 	
 	public synchronized boolean caseIsFree(int x, int y){
-		ArrayList<GameObject> objects = game.getGameObjects();
 		boolean obstacle = false;
-		for(GameObject object : objects){
+		for(GameObject object : game.getGameObjects()){
 			if(object.isAtPosition(x, y)){
 				obstacle = object.isObstacle();
 			}
