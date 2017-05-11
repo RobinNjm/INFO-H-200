@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class InstantHeal extends InventoryItem{
 	
-	private int healValue = 2;
+	private int healValue = 1;
 	
 	public InstantHeal(int posX, int posY, Game game){
 		super(posX, posY, 3, game);

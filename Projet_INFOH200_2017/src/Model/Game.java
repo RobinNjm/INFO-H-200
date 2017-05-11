@@ -39,7 +39,7 @@ public class Game implements DemisableObserver{
 		player.setPosition(1, 1);
 		
 		this.levelNumber += 1;
-		window.map.updateLevelNumber();
+		window.map.levelNumber += 1;
 		
 		if(this.levelNumber != 1){
 			window.nextLevel(this.levelNumber);
@@ -187,6 +187,9 @@ public class Game implements DemisableObserver{
 		} else if (count == 3){
 			Bomb bomb = new Bomb(posX, posY, this);
 			objects.add(bomb);
+		} else if (count == 4){
+			InvulnarabilityItem invulnerable = new InvulnarabilityItem(posX, posY, this);
+			objects.add(invulnerable);
 		}
 	}
 	

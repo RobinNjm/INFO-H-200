@@ -24,7 +24,7 @@ public class Map extends JPanel {
 	protected int numberOfMonsters;
 	private static final int sizeMap = 20;
 	private int tileSize = 35*20/sizeMap;
-	private int levelNumber = 0;
+	public int levelNumber = 0;
 	
 	private BufferedImage bomb ;
 	private BufferedImage enemy;
@@ -35,6 +35,7 @@ public class Map extends JPanel {
 	private BufferedImage breakableBlock;
 	private BufferedImage explosion;
 	private BufferedImage teleporterItem;
+	private BufferedImage invulnerabilityItem;
 	
 	public Map(){
 		this.setFocusable(true);
@@ -49,6 +50,7 @@ public class Map extends JPanel {
 			this.breakableBlock = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/breakableBlock.jpg")));
 			this.explosion = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/explosion.png")));
 			this.teleporterItem = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/chimichanga.png")));
+			this.invulnerabilityItem = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/invulnerabilityItem.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -83,9 +85,7 @@ public class Map extends JPanel {
 			int y = object.getPosY();
 			int color = object.getColor();			
 			
-			if(color == 0){					//définition de la couleur de remplissage de l'objet
-				g.setColor(Color.PINK);
-			}else if(color == 1){
+			if(color == 1){
 				g.drawImage(player, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 2){
 				g.drawImage(enemy, x*35*20/sizeMap, y*35*20/sizeMap, null);
@@ -101,17 +101,11 @@ public class Map extends JPanel {
 				g.drawImage(breakableBlock, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 8){
 				g.drawImage(wall, x*35*20/sizeMap, y*35*20/sizeMap, null);
+			}else if(color == 9){
+				g.drawImage(invulnerabilityItem, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 12){
 				g.drawImage(explosion, x*35*20/sizeMap, y*35*20/sizeMap, null);
-			}
-			
-
-			if(color == 0){
-				g.fillRect(x*35*20/sizeMap, y*35*20/sizeMap, 35*20/sizeMap , 35*20/sizeMap );
-				g.setColor(Color.black);			//couleur du cadre de l'objet
-				g.drawRect(x*35*20/sizeMap, y*35*20/sizeMap, 35*20/sizeMap , 35*20/sizeMap ); 
-			}
-			
+			}			
 		}
 		
 		g.setColor(Color.white);			//couleur d'un rectangle d'affichage
@@ -153,10 +147,6 @@ public class Map extends JPanel {
 		graphics.drawImage(image, 0, 0, tileSize, tileSize, null);
 		graphics.dispose();
 		return scaledImage;
-	}
-	
-	public void updateLevelNumber(){
-		this.levelNumber += 1;
 	}
 	
 	public synchronized void setObjects(ArrayList<GameObject> objects){

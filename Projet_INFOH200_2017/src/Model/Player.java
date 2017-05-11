@@ -7,6 +7,7 @@ public class Player extends Character implements DemisableObserver{
 	
 	protected int countBomb;
 	public Inventory inventory;
+	private boolean isInvulnerable = false;
 
 	public Player(int x, int y, int lifes, int attackValue, Game game){
 		super(x, y, 1, lifes, attackValue, game);
@@ -71,11 +72,24 @@ public class Player extends Character implements DemisableObserver{
 		this.posX = x;
 		this.posY = y;
 	}
+	
+	public void invulnerable() {
+		this.isInvulnerable  = !this.isInvulnerable;
+	}
+	
+	@Override
+	public void removeLifes(int hurt){
+		if (!this.isInvulnerable){
+			this.lifes = this.lifes - hurt;
+			if(this.lifes == 0){
+			game.gameOver();
+			}
+		}
+	}
 
 	@Override
 	public void demise(Demisable d, ArrayList<GameObject> loot) {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

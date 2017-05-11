@@ -6,7 +6,7 @@ public class Bomb extends Item implements Runnable, Damageable, DamageableObserv
 	
 	public int duration = 1000;
 	public int bombRange = 1;
-	boolean detonated = false;
+	private boolean detonated = false;
 	protected ArrayList<DemisableObserver> demisableObservers = new ArrayList<DemisableObserver>();
 	private ArrayList<DamageableObserver> damageableObservers = new ArrayList<DamageableObserver>();
 	
