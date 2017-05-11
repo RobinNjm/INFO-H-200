@@ -6,9 +6,16 @@ public class PushableBlock extends UnbreakableBlock{
 		super(x, y, 10);
 	}
 	
-	public void move(int x, int y){
-		posX = posX + x;
-		posY = posY + y;
+	public boolean move(int x, int y, boolean caseIsFree){
+		boolean obstacle = false;
+		if (caseIsFree){
+			posX = posX + x;
+			posY = posY + y;
+		}else{
+			obstacle = true;
+		}
+		
+		return obstacle;
 	}
 
 }

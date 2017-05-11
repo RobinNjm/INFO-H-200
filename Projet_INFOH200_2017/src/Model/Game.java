@@ -12,6 +12,7 @@ public class Game implements DemisableObserver{
 	private Window window;
 	protected int sizeMap = Map.getSizeMap();
 	private int numberOfBreakableBlocks = 50;
+	private int numberOfPushableBlocks = 10;
 	private int initNumberOfMonsters = 0;
 	private int numberOfMonsters = initNumberOfMonsters;
 	private boolean whichOne = true;
@@ -59,6 +60,13 @@ public class Game implements DemisableObserver{
 			list = generatePosition();
 			BreakableBlock block = new BreakableBlock(list.get(0),list.get(1));
 			block.demisableAttach(this);
+			objects.add(block);
+		}
+		
+		for(int i = 0; i < numberOfPushableBlocks; i++){
+			ArrayList<Integer> list;
+			list = generatePosition();
+			PushableBlock block = new PushableBlock(list.get(0),list.get(1));
 			objects.add(block);
 		}
 		
@@ -135,11 +143,11 @@ public class Game implements DemisableObserver{
 		int x = 0;
 		int y = 0;
 		do{
-			x = rand.nextInt(sizeMap-7) + 1;
-			y = rand.nextInt(sizeMap-7) + 1;
+			x = rand.nextInt(sizeMap-5) + 1;
+			y = rand.nextInt(sizeMap-5) + 1;
 		} while (!caseIsFree(x, y));
-		list.add(x + 5);
-		list.add(y + 5);
+		list.add(x + 3);
+		list.add(y + 3);
 		return list;
 	}
 	
@@ -177,7 +185,7 @@ public class Game implements DemisableObserver{
 	
 	private synchronized void loot(int posX, int posY){
 		Random rand = new Random();
-		int count = rand.nextInt(5);
+		int count = rand.nextInt(10);
 		if (count == 0 || count == 1){
 			InstantHeal heal = new InstantHeal(posX, posY, this);
 			objects.add(heal);
@@ -212,6 +220,10 @@ public class Game implements DemisableObserver{
 	
 	public void swapAttack(){
 		this.whichOne = !this.whichOne;
+	}
+	
+	public void startTimer(int duration){
+		window.map.startTimer(duration);
 	}
 	
 	@Override

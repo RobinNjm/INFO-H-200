@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class InvulnarabilityItem extends InventoryItem implements Runnable{
 	
-	private int duration = 10000;
+	private int duration = 5000;
 	private ArrayList<InventoryItem> inUseObjects;
 	private Player player;
 
@@ -33,12 +33,7 @@ public class InvulnarabilityItem extends InventoryItem implements Runnable{
 	public void run() {
 		this.setPosition(game.sizeMap + 7, 1);
 		player.invulnerable();
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		game.startTimer(duration);
 		player.invulnerable();
 		inUseObjects.remove(this);
 		this.drop();

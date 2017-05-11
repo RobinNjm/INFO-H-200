@@ -25,6 +25,8 @@ public class Map extends JPanel {
 	private static final int sizeMap = 20;
 	private int tileSize = 35*20/sizeMap;
 	public int levelNumber = 0;
+	private boolean drawTimer = false;
+	private int timer;
 	
 	private BufferedImage bomb ;
 	private BufferedImage enemy;
@@ -36,6 +38,7 @@ public class Map extends JPanel {
 	private BufferedImage explosion;
 	private BufferedImage teleporterItem;
 	private BufferedImage invulnerabilityItem;
+	private BufferedImage pushableBlock;
 	
 	public Map(){
 		this.setFocusable(true);
@@ -51,6 +54,7 @@ public class Map extends JPanel {
 			this.explosion = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/explosion.png")));
 			this.teleporterItem = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/chimichanga.png")));
 			this.invulnerabilityItem = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/invulnerabilityItem.png")));
+			this.pushableBlock = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/pushableBlock.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -103,6 +107,8 @@ public class Map extends JPanel {
 				g.drawImage(wall, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 9){
 				g.drawImage(invulnerabilityItem, x*35*20/sizeMap, y*35*20/sizeMap, null);
+			}else if(color == 10){
+				g.drawImage(pushableBlock, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 12){
 				g.drawImage(explosion, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}			
@@ -128,6 +134,10 @@ public class Map extends JPanel {
 		g.drawString("In Use", 700 + 6*tileSize, 20);
 		g.drawString("Level: " + levelNumber, 700 + 11*tileSize, 20);
 		
+		if (drawTimer){
+			g.drawString(Float.toString(timer), 695 + 7*tileSize, 20 + 2*tileSize);
+		}
+		
 		Font font2 = new Font("Courier", Font.BOLD, 30);
 		g.setFont(font2);
 		
@@ -147,6 +157,21 @@ public class Map extends JPanel {
 		graphics.drawImage(image, 0, 0, tileSize, tileSize, null);
 		graphics.dispose();
 		return scaledImage;
+	}
+	
+	public void startTimer(int duration){
+		drawTimer = !drawTimer;
+		timer = duration/1000;
+		for (int count = 0; count < duration; count += 1000){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			timer -= 1;
+			repaint();
+		}
+		drawTimer = !drawTimer;
 	}
 	
 	public synchronized void setObjects(ArrayList<GameObject> objects){

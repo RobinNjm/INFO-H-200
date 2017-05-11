@@ -7,6 +7,7 @@ public class HealOverTime extends InventoryItem implements Runnable {
 	private ArrayList<InventoryItem> inUseObjects;
 	private int healValue = 3;
 	private Player player;
+	private int interval = 5000;
 	
 	public HealOverTime(int posX, int posY, Game game){
 		super(posX, posY, 4, game);
@@ -22,12 +23,8 @@ public class HealOverTime extends InventoryItem implements Runnable {
 	public synchronized void run(){
 		this.setPosition(game.sizeMap + 7, 1);
 		for (int i = 1 ; i<healValue ; i++){
-			try {
-				Thread.sleep(5000);
-				player.addLifes(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			game.startTimer(interval);
+			player.addLifes(1);
 		}
 		inUseObjects.remove(this);
 		this.drop();

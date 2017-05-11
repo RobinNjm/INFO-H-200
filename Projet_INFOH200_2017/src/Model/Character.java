@@ -20,7 +20,7 @@ public abstract class Character extends GameObject implements DamageableObserver
 		int nextX = this.getPosX() + x;
 		int nextY = this.getPosY() + y;
 		
-		if(caseIsFree(nextX, nextY)){
+		if(caseIsFree(nextX, nextY, x, y)){
 			posX = posX + x;
 			posY = posY + y;
 		}
@@ -35,11 +35,19 @@ public abstract class Character extends GameObject implements DamageableObserver
 		return this.lifes;
 	}
 	
-	public synchronized boolean caseIsFree(int x, int y){
+	public synchronized boolean caseIsFree(int nextX, int nextY, int x, int y){
 		boolean obstacle = false;
 		for(GameObject object : game.getGameObjects()){
-			if(object.isAtPosition(x, y)){
-				obstacle = object.isObstacle();
+			if(object.isAtPosition(nextX, nextY)){
+				if (!(object instanceof PushableBlock)){
+					obstacle = object.isObstacle();
+				} else {
+					 if (this instanceof Player){
+						 obstacle = ((PushableBlock) object).move(x, y, caseIsFree(nextX + x, nextY + y, x, y));
+					 } else{
+						 obstacle = true;
+					 }
+				}
 			}
 			if(obstacle){
 				break;
