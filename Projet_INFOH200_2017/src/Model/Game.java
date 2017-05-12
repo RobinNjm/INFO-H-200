@@ -27,6 +27,7 @@ public class Game implements DemisableObserver{
 		
 		// Creating one Player at position (1,1)
 		objects.add(new Player(1,1,5,1, this));
+		window.map.attack = getAttack();
 		
 		mapBuild();
 	}
@@ -211,15 +212,25 @@ public class Game implements DemisableObserver{
 			player.simpleAttack(x, y);
 			notifyView();
 		} else {
-			/*player.distanceAttack(x, y);
-			notifyView();*/
+			player.distanceAttack(x, y);
+			notifyView();
 		}
 		notifyView();
-		
+	}
+	
+	public synchronized void addObject(GameObject object){
+		objects.add(object);
+		notifyView();
+	}
+	
+	public synchronized void removeObject(GameObject object){
+		objects.remove(object);
+		notifyView();
 	}
 	
 	public void swapAttack(){
 		this.whichOne = !this.whichOne;
+		window.map.attack = getAttack();
 	}
 	
 	public void startTimer(int duration){
@@ -257,5 +268,13 @@ public class Game implements DemisableObserver{
 	public synchronized void useItem(int playerNumber, int selectedItem){
 		Player player = ((Player) objects.get(playerNumber));
 		player.useItem(selectedItem);
+	}
+	
+	public String getAttack(){
+		String attack = "Fist";
+		if (!whichOne){
+			attack = "Laser";
+		}
+		return attack;
 	}
 }

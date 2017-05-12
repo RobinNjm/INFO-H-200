@@ -2,7 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-public class Explosion extends GameObject implements Runnable, Demisable, Damageable{
+public class Explosion extends GameObject implements Runnable, Demisable{
 	
 	private int duration;
 	private ArrayList<DemisableObserver> observers = new ArrayList<DemisableObserver>();
@@ -40,18 +40,4 @@ public class Explosion extends GameObject implements Runnable, Demisable, Damage
 	public boolean isObstacle() {
 		return false;
 	}
-
-	@Override
-	public void damageableAttach(DamageableObserver po) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void damageableNotifyObserver() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 }

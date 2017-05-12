@@ -49,9 +49,9 @@ public class Keyboard implements KeyListener{
 			case KeyEvent.VK_UP:
 				game.attack(0, -1, player1);
 				break;
-			/*case KeyEvent.VK_BACK_SPACE:
+			case KeyEvent.VK_CONTROL:
 				game.swapAttack();
-				break;*/
+				break;
 			case KeyEvent.VK_ADD:
 				game.pickItem(player1);
 				break;

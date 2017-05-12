@@ -27,6 +27,7 @@ public class Map extends JPanel {
 	public int levelNumber = 0;
 	private boolean drawTimer = false;
 	private int timer;
+	public String attack;
 	
 	private BufferedImage bomb ;
 	private BufferedImage enemy;
@@ -39,6 +40,8 @@ public class Map extends JPanel {
 	private BufferedImage teleporterItem;
 	private BufferedImage invulnerabilityItem;
 	private BufferedImage pushableBlock;
+	private BufferedImage laser;
+	private BufferedImage laser2;
 	
 	public Map(){
 		this.setFocusable(true);
@@ -55,6 +58,8 @@ public class Map extends JPanel {
 			this.teleporterItem = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/chimichanga.png")));
 			this.invulnerabilityItem = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/invulnerabilityItem.png")));
 			this.pushableBlock = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/pushableBlock.png")));
+			this.laser = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/laser.png")));
+			this.laser2 = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/laser2.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -109,9 +114,13 @@ public class Map extends JPanel {
 				g.drawImage(invulnerabilityItem, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 10){
 				g.drawImage(pushableBlock, x*35*20/sizeMap, y*35*20/sizeMap, null);
+			}else if(color == 11){
+				g.drawImage(laser, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 12){
 				g.drawImage(explosion, x*35*20/sizeMap, y*35*20/sizeMap, null);
-			}			
+			}else if(color == 13){
+				g.drawImage(laser2, x*35*20/sizeMap, y*35*20/sizeMap, null);
+			}		
 		}
 		
 		g.setColor(Color.white);			//couleur d'un rectangle d'affichage
@@ -149,6 +158,9 @@ public class Map extends JPanel {
 		
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawString("Bombs: " + player.getCountBomb(), 710, 12*tileSize);
+		
+		g.setColor(Color.green);
+		g.drawString("Active Weapon: " + attack , 710, 14*tileSize);
 	}
 	
 	private BufferedImage scaleImage(BufferedImage image){

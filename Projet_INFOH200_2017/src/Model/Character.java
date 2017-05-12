@@ -56,6 +56,21 @@ public abstract class Character extends GameObject implements DamageableObserver
 		return !obstacle;
 	}
 	
+	public synchronized boolean caseIsKillable(int x, int y){
+		boolean isKillable = true;
+		for(GameObject object : game.getGameObjects()){
+			if(object.isAtPosition(x, y)){
+				if (object instanceof Block){
+					isKillable = false;
+				} else if (object instanceof Monster){
+					isKillable = false;
+					((Monster) object).removeLifes(1);
+				}
+			}
+		}
+		return isKillable;
+	}
+	
 	public void removeLifes(int hurt){
 		this.lifes = this.lifes - hurt;
 		if(this.lifes == 0){

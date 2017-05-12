@@ -49,6 +49,19 @@ public class Player extends Character implements DemisableObserver{
 		}
 	}
 	
+	public synchronized void distanceAttack(int x, int y){
+		int nextX = this.posX + x;
+		int nextY = this.posY + y;
+		boolean wtf = true;
+		while (caseIsKillable(nextX, nextY) && wtf){
+			wtf = false;
+			Laser arrow = new Laser(nextX, nextY, game);
+			wtf = arrow.setPosition(nextX, nextY, x!=0);
+			nextX += x;
+			nextY += y;
+		}
+	}
+	
 	public void pick(ArrayList<GameObject> objects){
 		for (GameObject item : objects){
 			if (item instanceof InventoryItem && item.isAtPosition(this.posX, this.posY)){
