@@ -8,7 +8,7 @@ public abstract class Block extends GameObject{
 
 	@Override
 	public boolean isObstacle() {
-		return true;
+		return true;	//tous les blocs sont des obstacles
 	}
 	
 

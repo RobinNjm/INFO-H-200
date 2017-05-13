@@ -4,20 +4,17 @@ public class Laser extends GameObject implements Runnable{
 	
 	private Game game;
 	
-	public Laser(int x, int y, Game game) {
+	public Laser(int x, int y, Game game, boolean horizontal) {
 		super(x, y, 11);
 		this.game = game;
-	}
-	
-	public void setPosition(int x, int y, boolean horizontal){
-		if (!horizontal){
+		
+		if (!horizontal){	//change d'image si le laser est lancé verticalement
 			color = 13;
 		}
-		this.posX = x;
-		this.posY = y;
-		game.addObject(this);
-		game.notifyView();
-		new Thread(this).start();
+		
+		game.addObject(this);	//objet ajouté à la liste
+		game.notifyView();		//demande d'actualisation de la map par l'intermédiaire de game
+		new Thread(this).start();	//démarrage du thread
 	}
 	
 	@Override
@@ -28,13 +25,12 @@ public class Laser extends GameObject implements Runnable{
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(150);
+			Thread.sleep(150);	//temps d'affichage du laser
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		game.removeObject(this);
-		game.notifyView();
+		game.removeObject(this);	//objet supprimé de la liste
+		game.notifyView();			//demande d'actualisation de la map par l'intermédiaire de game
 	}
 
 }

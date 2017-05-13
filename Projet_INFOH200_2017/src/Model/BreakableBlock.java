@@ -12,6 +12,9 @@ public class BreakableBlock extends Block implements Demisable, DamageableObserv
 
 	@Override
 	public void damaged(Damageable e) {
+		/*
+		 * permet de déterminer si le bloc doit être explosé par une bombe, seul moyen de le détruire
+		 */
 		Bomb bomb = (Bomb) e;
 		boolean distanceX = Math.abs(this.getPosX() - bomb.getPosX()) <= bomb.getRange();
 		boolean distanceY = Math.abs(this.getPosY() - bomb.getPosY()) <= bomb.getRange();
@@ -32,9 +35,4 @@ public class BreakableBlock extends Block implements Demisable, DamageableObserv
 			o.demise(this, null);
 		}	
 	}
-
-	
-	
-	
-
 }

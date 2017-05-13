@@ -19,38 +19,42 @@ public class Inventory {
 	}
 	
 	public void addItem(InventoryItem item){
-		if (inventoryObjects.size() < size && !(item instanceof TeleporterItem)){
+		/*
+		 * ajoute un objet à l'inventaire si il y a encore de la place
+		 */
+		if (inventoryObjects.size() < size){
 			inventoryObjects.add(item);
 			item.setPosition(game.sizeMap + 2, inventoryObjects.size());	//colonne dédiée à l'inventaire
-			
 			game.notifyView();
-		} else if (item instanceof TeleporterItem){
-			game.mapBuild();
 		} else {
 			System.out.println("Inventaire plein");
 		}
 	}
 	
 	public void useItem(int position){
+		/*
+		 * utilise un objet à la position reçue en paramètre si il y en a un
+		 * sinon affiche "Aucun objet à la position  + position" dans la console
+		 */
 		if (inventoryObjects.size() >= position){
 			InventoryItem item = inventoryObjects.get(position);
 			if (item.isInstant()){
 				
 				item.use(player, inUseObjects);
 				
-				inventoryObjects.remove(position);
+				inventoryObjects.remove(position);	//enlève de l'inventaire
 				
 				int count = 1;
-				for (InventoryItem object : inventoryObjects){
+				for (InventoryItem object : inventoryObjects){	//repositionnement des objets dans l'inventaire
 					object.setPosition(game.sizeMap + 2, count);
 					count++;
 				}
-			} else if (inUseObjects.size() == 0){
+			} else if (inUseObjects.size() == 0){	//objet pas instantané et aucun objet en cours d'utilisation
 				inUseObjects.add(item);
 				
 				item.use(player, inUseObjects);
 				
-				inventoryObjects.remove(position);
+				inventoryObjects.remove(position);	//enlève de l'inventaire
 				
 				int count = 1;
 				for (InventoryItem object : inventoryObjects){
@@ -66,6 +70,10 @@ public class Inventory {
 	}
 	
 	public void dropItem(int position){
+		/*
+		 * abandonne l'objet à la position reçue en paramètre si il y en a un
+		 * sinon affiche "Aucun objet à la position  + position" dans la console
+		 */
 		if (inventoryObjects.size() >= position){
 			InventoryItem item = inventoryObjects.get(position);
 			item.drop();

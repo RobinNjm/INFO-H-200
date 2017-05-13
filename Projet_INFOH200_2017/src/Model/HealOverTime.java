@@ -14,13 +14,21 @@ public class HealOverTime extends InventoryItem implements Runnable {
 	}
 	
 	public synchronized void use(Player player, ArrayList<InventoryItem> inUseObjects){
+		/*
+		 * l'utilisation de cet item entraîne le gain d'une vie par le joueur
+		 * suivi du commencement d'un thread
+		 */
 		this.inUseObjects = inUseObjects;
-		player.addLifes(1);
 		this.player = player;
+		player.addLifes(1);
 		new Thread((Runnable) this).start();
 	}
 	
 	public synchronized void run(){
+		/*
+		 * le thread lancé enclenche un timer après lequel le joueur gagne une vie
+		 * cette boucle est effectuée jusqu'à ce que la "healValue" soit atteinte
+		 */
 		this.setPosition(game.sizeMap + 7, 1);
 		for (int i = 1 ; i<healValue ; i++){
 			game.startTimer(interval);

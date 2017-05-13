@@ -28,16 +28,16 @@ public class Explosion extends GameObject implements Runnable, Demisable{
 
 	@Override
 	public synchronized void run() {
-			try {
-				Thread.sleep(this.duration);
-				this.demisableNotifyObserver();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}	
+		try {
+			Thread.sleep(this.duration);	//thread fait apparaître l'explosion pour une durée de duration ms avant de disparaître
+			this.demisableNotifyObserver();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}	
 	}
 
 	@Override
 	public boolean isObstacle() {
-		return false;
+		return false;	//les explosions ne sont pas des obstacles
 	}
 }

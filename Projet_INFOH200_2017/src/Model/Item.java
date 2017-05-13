@@ -17,6 +17,9 @@ public abstract class Item extends GameObject implements Demisable{
 	}
 	
 	public synchronized void drop(){
+		/*
+		 * enlève l'item de la liste globale des GameObject
+		 */
 		game.getGameObjects().remove(this);
 	}
 		

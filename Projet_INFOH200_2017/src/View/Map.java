@@ -175,7 +175,7 @@ public class Map extends JPanel {
 		return scaledImage;
 	}
 	
-	public synchronized void startTimer(int duration){			//fonction permettant de réaliser un timer
+	public void startTimer(int duration){			//fonction permettant de réaliser un timer
 		drawTimer = !drawTimer;
 		timer = duration/1000;
 		for (int count = 0; count < duration; count += 1000){
@@ -196,7 +196,7 @@ public class Map extends JPanel {
 	
 	public void redraw(){						//fonction actualisant la map dans le cas où le joueur est toujours en vie
 		Player player = ((Player) objects.get(0));
-		if (player.getLifes() > 0){
+		if (player.getLifes() >= 0){
 			this.repaint();
 		}
 	}

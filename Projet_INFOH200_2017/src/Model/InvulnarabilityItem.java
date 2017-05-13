@@ -21,21 +21,21 @@ public class InvulnarabilityItem extends InventoryItem implements Runnable{
 	public void use(Player player, ArrayList<InventoryItem> inUseObjects){
 		this.inUseObjects = inUseObjects;
 		this.player = player;
-		new Thread((Runnable) this).start();
+		new Thread((Runnable) this).start();	//lancement du thread quand on veut utiliser cet objet
 	}
 
 	@Override
 	public boolean isInstant() {
-		return false;
+		return false;		//objet non instantané
 	}
 
 	@Override
 	public void run() {
-		this.setPosition(game.sizeMap + 7, 1);
-		player.invulnerable();
-		game.startTimer(duration);
-		player.invulnerable();
-		inUseObjects.remove(this);
-		this.drop();
+		this.setPosition(game.sizeMap + 7, 1);	//déplacement de l'objet de l'inventaire vers "in use"
+		player.invulnerable();					//appel de la fonction invulnérable dans player
+		game.startTimer(duration);				//démarrage d'un timer qui s'affiche à l'écran
+		player.invulnerable();				//nouvel appel de la fonction invulnérable dans player pour revenir à l'état initial
+		inUseObjects.remove(this);			//suppression de l'objet dans la liste en cours d'utilisation
+		this.drop();						//suppression de l'objet dans la liste d'objets globale
 	}
 }

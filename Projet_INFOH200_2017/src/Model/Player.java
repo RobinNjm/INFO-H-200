@@ -16,18 +16,23 @@ public class Player extends Character implements DemisableObserver{
 	}
 	
 	public synchronized Bomb dropBomb(){
+		/*
+		 * permet au joueur de lacher une bombe si il en a encore
+		 */
 		if(this.countBomb > 0){
-			this.countBomb = this.countBomb - 1;
-			Bomb bomb = new Bomb(posX, posY, game);
+			this.countBomb = this.countBomb - 1;	//décrémentation du compteur de bombes
+			Bomb bomb = new Bomb(posX, posY, game);	//création d'une bombe
 			bomb.demisableAttach(this);
-			Thread thread = new Thread(bomb);
-			thread.start();
+			new Thread(bomb).start();				//démarrage de son thread
 			return bomb;
 		}
 		return null;
 	}
 	
 	public void addLifes(int heal){
+		/*
+		 * ajoute un certain nombre de vie(s) au joueur
+		 */
 		this.lifes = this.lifes + heal;
 	}
 	
@@ -35,37 +40,43 @@ public class Player extends Character implements DemisableObserver{
 		return countBomb;
 	}
 	
-	public void setCountBomb(int number){
-		this.countBomb = number;
-	}
-	
 	public synchronized void simpleAttack(int x, int y){
+		/*
+		 * fonction permettant une attaque au corps à corps
+		 * prenant en paramètre la direction dans laquelle l'effectuer
+		 */
 		for(GameObject object : game.getGameObjects()){
-			if (object instanceof Monster){
-				if (object.isAtPosition(this.posX + x, this.posY + y)){
-					((Monster) object).removeLifes(attackValue);
+			if (object instanceof Monster){			//pour tous les monstres de la liste
+				if (object.isAtPosition(this.posX + x, this.posY + y)){	//vérifier si ils sont à la position de l'attaque
+					((Monster) object).removeLifes(attackValue);	//si oui, lui enlever de la vie
 				}
 			}
 		}
 	}
 	
 	public synchronized void distanceAttack(int x, int y){
+		/*
+		 * fonction permettant l'utilisation du laser
+		 * prenant en paramètre la direction dans laquelle le projeter
+		 */
 		int nextX = this.posX + x;
 		int nextY = this.posY + y;
-		while (caseIsKillable(nextX, nextY)){
-			Laser laser = new Laser(nextX, nextY, game);
-			laser.setPosition(nextX, nextY, x!=0);
-			nextX += x;
+		while (caseIsKillable(nextX, nextY)){	//si un laser peut être affiché sur cette case
+			new Laser(nextX, nextY, game, x!=0);	//laser créé
+			nextX += x;							//toujours le cas une case plus loin?
 			nextY += y;
 		}
 	}
 	
 	public void pick(ArrayList<GameObject> objects){
+		/*
+		 * ramasser des objets sur le sol
+		 */
 		for (GameObject item : objects){
 			if (item instanceof InventoryItem && item.isAtPosition(this.posX, this.posY)){
-				inventory.addItem((InventoryItem) item);
+				inventory.addItem((InventoryItem) item);	//ajouter l'objet à l'inventaire si il peut l'être
 			} else if (item instanceof Item && item.isAtPosition(this.posX, this.posY)){
-				this.countBomb += 1;
+				this.countBomb += 1;		//si l'objet ne peut pas aller dans l'inventaire, c'est une bombe
 				((Item) item).drop();
 			}
 		}
@@ -85,15 +96,18 @@ public class Player extends Character implements DemisableObserver{
 	}
 	
 	public void invulnerable() {
+		/*
+		 * appelée si une potion d'invulnérabilité est en cours d'utilisation
+		 */
 		this.isInvulnerable  = !this.isInvulnerable;
 	}
 	
 	@Override
 	public void removeLifes(int hurt){
-		if (!this.isInvulnerable){
+		if (!this.isInvulnerable){	//enlève des vies seulement si le joueur n'est pas invulnérable
 			this.lifes = this.lifes - hurt;
 			if(this.lifes == 0){
-			game.gameOver();
+				game.gameOver();	//jeu terminé si le joueur n'a plus de vie
 			}
 		}
 	}

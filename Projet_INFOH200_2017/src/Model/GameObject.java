@@ -28,6 +28,6 @@ public abstract class GameObject {
 		return posX == x && posY == y;
 	}
 	
-	public abstract boolean isObstacle();
+	public abstract boolean isObstacle();	//servira à déterminer si un objet peut être traversé ou pas
 
 }

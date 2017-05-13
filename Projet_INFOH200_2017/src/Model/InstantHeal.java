@@ -11,7 +11,7 @@ public class InstantHeal extends InventoryItem{
 	}
 	
 	public void use(Player player, ArrayList<InventoryItem> inUseObjects){
-		player.addLifes(healValue);
+		player.addLifes(healValue);		//ajoute des vies au joueur
 		drop();
 	}
 

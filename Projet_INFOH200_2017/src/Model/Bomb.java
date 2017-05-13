@@ -20,9 +20,10 @@ public class Bomb extends Item implements Runnable, Damageable, DamageableObserv
 	}
 	
 	@Override
-	public synchronized void run() {
+	public void run() {
 		int count = 0;
 		while(!this.detonated  && count < this.duration/10.0){
+			//continue tant que le temps de détonation n'est pas atteint et tant que la détonation a eu lieu
 			try {
 				Thread.sleep(10);
 				count = count + 1;
@@ -37,7 +38,7 @@ public class Bomb extends Item implements Runnable, Damageable, DamageableObserv
 
 	@Override
 	public void demisableAttach(DemisableObserver po) {
-		demisableObservers.add(po);				
+		demisableObservers.add(po);		//ajoute un observateur		
 	}
 
 	@Override
@@ -47,19 +48,15 @@ public class Bomb extends Item implements Runnable, Damageable, DamageableObserv
 		int x = this.getPosX();
 		int y = this.getPosY();
 		for(int i = x-range; i <= x+range; i++){
-			for(int j = y-range; j <= y+range; j++){
-				Explosion cas = new Explosion(i,j,250);
-				Thread thread = new Thread(cas);
-				thread.start();
+			for(int j = y-range; j <= y+range; j++){	//créé des explosions dans une zone carré autour de la position de la bombe
+				Explosion explosion = new Explosion(i,j,250);
+				new Thread(explosion).start();		//démarre le thread des explosions
 				for(DemisableObserver observer : demisableObservers){
-					cas.demisableAttach(observer);
+					explosion.demisableAttach(observer);
 				}
-				loot.add(cas);
+				loot.add(explosion);
 			}
-		}
-		
-		//System.out.println(loot.size());
-		
+		}		
 		
 		for (DemisableObserver o : this.demisableObservers) {
 			o.demise(this, loot);

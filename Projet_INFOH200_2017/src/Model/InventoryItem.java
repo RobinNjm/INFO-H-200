@@ -14,6 +14,8 @@ public abstract class InventoryItem extends Item{
 	}
 	
 	public abstract void use(Player player, ArrayList<InventoryItem> inUseObjects);
+	//méthode déterminant comment doivent être utilisés les inventoryItem
 	
 	public abstract boolean isInstant();
+	//méthode déterminant si un InventoryItem est instantané
 }
