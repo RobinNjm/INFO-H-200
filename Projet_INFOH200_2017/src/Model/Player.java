@@ -46,10 +46,10 @@ public class Player extends Character implements DemisableObserver{
 		 * prenant en paramètre la direction dans laquelle l'effectuer
 		 */
 		for(GameObject object : game.getGameObjects()){
-			if (object instanceof Monster){			//pour tous les monstres de la liste
-				if (object.isAtPosition(this.posX + x, this.posY + y)){	//vérifier si ils sont à la position de l'attaque
-					((Monster) object).removeLifes(attackValue);	//si oui, lui enlever de la vie
-				}
+			if (object instanceof Monster && object.isAtPosition(this.posX + x, this.posY + y)){	
+				//pour tous les monstres de la liste vérifier si ils sont à la position de l'attaque
+				((Monster) object).removeLifes(attackValue);	//si oui, lui enlever de la vie
+				
 			}
 		}
 	}

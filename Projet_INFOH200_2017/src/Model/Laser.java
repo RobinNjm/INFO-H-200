@@ -25,7 +25,7 @@ public class Laser extends GameObject implements Runnable{
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(150);	//temps d'affichage du laser
+			Thread.sleep(100);	//temps d'affichage du laser
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

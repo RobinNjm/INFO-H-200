@@ -13,8 +13,9 @@ public class Game implements DemisableObserver{
 	protected int sizeMap = Map.getSizeMap();
 	private int numberOfBreakableBlocks = 50;
 	private int numberOfPushableBlocks = 10;
-	private int initNumberOfMonsters = 0;
-	private int numberOfMonsters = initNumberOfMonsters;
+	private int numberOfShortRangeMonsters = 0;
+	private int numberOfLongRangeMonsters = 0;
+	private int numberOfMonsters = numberOfLongRangeMonsters + numberOfShortRangeMonsters;
 	private boolean whichAttack = true;
 	private int monsterAttack = 0;
 	private int monsterLifes = 0;
@@ -74,21 +75,31 @@ public class Game implements DemisableObserver{
 			objects.add(new Trap(list.get(0),list.get(1), player));
 		}
 		
-		this.numberOfMonsters = this.initNumberOfMonsters + 5;
-		this.initNumberOfMonsters += 5;		//incrémentation de la vie et de l'attaque des monstres de 1
-		this.monsterAttack += 1;			//ainsi que du nombre de monstres de 5
+		this.numberOfShortRangeMonsters += 5;	//incrémentation de la vie et de l'attaque 
+		this.monsterAttack += 1;				//des monstres de 1 ainsi que du nombre de monstres courte portée de 5
 		this.monsterLifes += 1;
-		window.setNumberOfMonsters(this.numberOfMonsters);
 		
-		for (int i = 0; i < numberOfMonsters; i++){			//placement de ces ennemis aléatoirement
+		for (int i = 0; i < numberOfShortRangeMonsters; i++){			//placement de ces ennemis aléatoirement
 			ArrayList<Integer> list;
 			list = restrictedGeneratePosition();
-			Monster monster = new Monster(list.get(0),list.get(1), monsterLifes, monsterAttack, this);
+			ShortRangeMonster monster = new ShortRangeMonster(list.get(0),list.get(1), monsterLifes, monsterAttack, this);
 			monster.demisableAttach(this);
 			objects.add(monster);
 		}
-				
-				
+		
+		this.numberOfLongRangeMonsters += 2;	//incrémentation du nombre de monstres longue portée de 2
+		
+		for (int i = 0; i < numberOfLongRangeMonsters; i++){			//placement de ces ennemis aléatoirement
+			ArrayList<Integer> list;
+			list = restrictedGeneratePosition();
+			LongRangeMonster monster = new LongRangeMonster(list.get(0),list.get(1), monsterLifes, monsterAttack, this);
+			monster.demisableAttach(this);
+			objects.add(monster);
+		}
+		
+		this.numberOfMonsters = this.numberOfLongRangeMonsters + this.numberOfShortRangeMonsters;
+		window.setNumberOfMonsters(this.numberOfMonsters);
+		
 		window.update(this.getGameObjects());
 		notifyView();
 	}
@@ -234,7 +245,7 @@ public class Game implements DemisableObserver{
 	}
 	
 	public int getNumberOfMonsters(){
-		return numberOfMonsters;
+		return (numberOfShortRangeMonsters + numberOfLongRangeMonsters);
 	}
 	
 	public synchronized void attack(int x, int y, int playerNumber){
@@ -244,10 +255,8 @@ public class Game implements DemisableObserver{
 		Player player = ((Player) objects.get(playerNumber));
 		if (whichAttack){
 			player.simpleAttack(x, y);
-			notifyView();
 		} else {
 			player.distanceAttack(x, y);
-			notifyView();
 		}
 		notifyView();
 	}

@@ -31,6 +31,7 @@ public class Map extends JPanel {
 	
 	private BufferedImage bomb ;				//initialisation de toutes les images utilisées plus loin
 	private BufferedImage enemy;
+	private BufferedImage enemy2;
 	private BufferedImage player;
 	private BufferedImage instantHeal;
 	private BufferedImage healOverTime;
@@ -50,6 +51,7 @@ public class Map extends JPanel {
 		try {							//lecture et redimensionnement des images utilisées plus loin
 			this.bomb = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/bomb.png")));
 			this.enemy = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/enemy.png")));
+			this.enemy2 = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/monster2.png")));
 			this.player = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/player.png")));
 			this.instantHeal = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/LifePotion.png")));
 			this.healOverTime = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/LifePotion2.png")));
@@ -124,7 +126,9 @@ public class Map extends JPanel {
 				g.drawImage(laser2, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 14){
 				g.drawImage(trap, x*35*20/sizeMap, y*35*20/sizeMap, null);
-			}	
+			}else if(color == 15){
+				g.drawImage(enemy2, x*35*20/sizeMap, y*35*20/sizeMap, null);
+			}
 		}
 		
 		g.setColor(Color.white);			//couleur d'un rectangle d'affichage
