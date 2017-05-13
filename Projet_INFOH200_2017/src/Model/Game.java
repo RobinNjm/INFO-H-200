@@ -18,7 +18,6 @@ public class Game implements DemisableObserver{
 	private boolean whichOne = true;
 	private int monsterAttack = 0;
 	private int monsterLifes = 0;
-	private int levelNumber = 0;
 	
 	
 	
@@ -40,12 +39,7 @@ public class Game implements DemisableObserver{
 		
 		player.setPosition(1, 1);
 		
-		this.levelNumber += 1;
 		window.map.levelNumber += 1;
-		
-		if(this.levelNumber != 1){
-			window.nextLevel(this.levelNumber);
-		}
 		
 		this.objects.addAll(player.inventory.getInventoryObjects());
 		
@@ -67,8 +61,13 @@ public class Game implements DemisableObserver{
 		for(int i = 0; i < numberOfPushableBlocks; i++){
 			ArrayList<Integer> list;
 			list = generatePosition();
-			PushableBlock block = new PushableBlock(list.get(0),list.get(1));
-			objects.add(block);
+			objects.add(new PushableBlock(list.get(0),list.get(1)));
+		}
+		
+		for(int i = 0; i < 3; i++){
+			ArrayList<Integer> list;
+			list = generatePosition();
+			objects.add(new Trap(list.get(0),list.get(1), player));
 		}
 		
 		this.numberOfMonsters = this.initNumberOfMonsters + 5;
@@ -146,7 +145,7 @@ public class Game implements DemisableObserver{
 		do{
 			x = rand.nextInt(sizeMap-5) + 1;
 			y = rand.nextInt(sizeMap-5) + 1;
-		} while (!caseIsFree(x, y));
+		} while (!caseIsFree(x + 3, y + 3));
 		list.add(x + 3);
 		list.add(y + 3);
 		return list;
@@ -244,11 +243,6 @@ public class Game implements DemisableObserver{
 			objects.addAll(loot);
 		}
 		notifyView();
-	}
-
-	public synchronized void unlimitedBombs(int playerNumber) {
-		Player player = ((Player) objects.get(playerNumber));
-		player.setCountBomb(10000);
 	}
 
 	public void gameOver() {

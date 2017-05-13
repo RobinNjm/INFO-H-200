@@ -29,7 +29,7 @@ public class Map extends JPanel {
 	private int timer;
 	public String attack;
 	
-	private BufferedImage bomb ;
+	private BufferedImage bomb ;				//initialisation de toutes les images utilisées plus loin
 	private BufferedImage enemy;
 	private BufferedImage player;
 	private BufferedImage instantHeal;
@@ -42,11 +42,12 @@ public class Map extends JPanel {
 	private BufferedImage pushableBlock;
 	private BufferedImage laser;
 	private BufferedImage laser2;
+	private BufferedImage trap;
 	
 	public Map(){
 		this.setFocusable(true);
 		this.requestFocusInWindow();
-		try {
+		try {							//lecture et redimensionnement des images utilisées plus loin
 			this.bomb = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/bomb.png")));
 			this.enemy = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/enemy.png")));
 			this.player = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/player.png")));
@@ -60,6 +61,7 @@ public class Map extends JPanel {
 			this.pushableBlock = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/pushableBlock.png")));
 			this.laser = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/laser.png")));
 			this.laser2 = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/laser2.png")));
+			this.trap = scaleImage(ImageIO.read(getClass().getResourceAsStream("/Images/trap.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -68,7 +70,7 @@ public class Map extends JPanel {
 	public synchronized void paint(Graphics g) { 
 		for(int i = 0; i<sizeMap; i++){				//largeur de map = sizeMap		
 			for(int j = 0; j<sizeMap; j++){			//hauteur de map = sizeMap
-				g.setColor(Color.LIGHT_GRAY);  		 // couleur de remplissage des cases
+				g.setColor(Color.LIGHT_GRAY);		 // couleur de remplissage des cases
 				g.fillRect(i*35*20/sizeMap, j*35*20/sizeMap, 35*20/sizeMap , 35*20/sizeMap ); 
 				g.setColor(Color.white);	   		 //couleur du tour des cases
 				g.drawRect(i*35*20/sizeMap, j*35*20/sizeMap, 35*20/sizeMap , 35*20/sizeMap ); 
@@ -89,7 +91,7 @@ public class Map extends JPanel {
 		g.setColor(Color.white);	   		 //couleur du tour des cases
 		g.drawRect((sizeMap + 7)*35*20/sizeMap, 35*20/sizeMap, 35*20/sizeMap , 35*20/sizeMap ); 
 		
-		for(GameObject object : this.objects){
+		for(GameObject object : this.objects){		//asssignation et dessin des images en fonction de la couleur attribuée
 			int x = object.getPosX();
 			int y = object.getPosY();
 			int color = object.getColor();			
@@ -120,7 +122,9 @@ public class Map extends JPanel {
 				g.drawImage(explosion, x*35*20/sizeMap, y*35*20/sizeMap, null);
 			}else if(color == 13){
 				g.drawImage(laser2, x*35*20/sizeMap, y*35*20/sizeMap, null);
-			}		
+			}else if(color == 14){
+				g.drawImage(trap, x*35*20/sizeMap, y*35*20/sizeMap, null);
+			}	
 		}
 		
 		g.setColor(Color.white);			//couleur d'un rectangle d'affichage
@@ -132,7 +136,7 @@ public class Map extends JPanel {
 		g.fillRect(700 + 8*tileSize, tileSize, 800, tileSize);			//rectangle à droite de "in use"
 		g.fillRect(700, 6*tileSize, 800, 800);							//rectangle derrière les compteurs de vie, monstre,...
 
-		Font font = new Font("Courier", Font.BOLD, 25); 			//Police d'écriture
+		Font font = new Font("Courier", Font.BOLD, 25); 				//Police d'écriture
 		g.setFont(font);
 		
 		
@@ -143,7 +147,7 @@ public class Map extends JPanel {
 		g.drawString("In Use", 700 + 6*tileSize, 20);
 		g.drawString("Level: " + levelNumber, 700 + 11*tileSize, 20);
 		
-		if (drawTimer){
+		if (drawTimer){									//affichage éventuel d'un timer lors de l'utilisation d'objets
 			g.drawString(Float.toString(timer), 695 + 7*tileSize, 20 + 2*tileSize);
 		}
 		
@@ -151,19 +155,19 @@ public class Map extends JPanel {
 		g.setFont(font2);
 		
 		g.setColor(Color.red);
-		g.drawString("Lifes: " + player.getLifes() , 710, 8*tileSize);   //écriture du nombre de vie restant
+		g.drawString("Lifes: " + player.getLifes() , 710, 8*tileSize);		//écriture du nombre de vies restant
 		
 		g.setColor(Color.blue);
-		g.drawString("Monsters: " + numberOfMonsters, 710, 10*tileSize);  //écriture du nombre de monstres restant
+		g.drawString("Monsters: " + numberOfMonsters, 710, 10*tileSize);	//écriture du nombre de monstres restant
 		
 		g.setColor(Color.LIGHT_GRAY);
-		g.drawString("Bombs: " + player.getCountBomb(), 710, 12*tileSize);
+		g.drawString("Bombs: " + player.getCountBomb(), 710, 12*tileSize);	//écriture du nombre de bombes restant
 		
 		g.setColor(Color.green);
-		g.drawString("Active Weapon: " + attack , 710, 14*tileSize);
+		g.drawString("Active Weapon: " + attack , 710, 14*tileSize);		//écriture de l'arme en cours d'utilisation
 	}
 	
-	private BufferedImage scaleImage(BufferedImage image){
+	private BufferedImage scaleImage(BufferedImage image){		//fonction permettant de mettre les images à la bonne taille
 		BufferedImage scaledImage = new BufferedImage(tileSize, tileSize, image.getType());
 		Graphics2D graphics = scaledImage.createGraphics();
 		graphics.drawImage(image, 0, 0, tileSize, tileSize, null);
@@ -171,7 +175,7 @@ public class Map extends JPanel {
 		return scaledImage;
 	}
 	
-	public void startTimer(int duration){
+	public synchronized void startTimer(int duration){			//fonction permettant de réaliser un timer
 		drawTimer = !drawTimer;
 		timer = duration/1000;
 		for (int count = 0; count < duration; count += 1000){
@@ -190,12 +194,14 @@ public class Map extends JPanel {
 		this.objects = objects;
 	}
 	
-	public void redraw(){
-		this.repaint();
+	public void redraw(){						//fonction actualisant la map dans le cas où le joueur est toujours en vie
+		Player player = ((Player) objects.get(0));
+		if (player.getLifes() > 0){
+			this.repaint();
+		}
 	}
 	
 	public static int getSizeMap(){
 		return sizeMap;
 	}
 }
-

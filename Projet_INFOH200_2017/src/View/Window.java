@@ -2,11 +2,11 @@ package View;
 import Model.GameObject;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -44,30 +44,6 @@ public class Window {
 	
 	public void setKeyListener(KeyListener keyboard){
 	    this.map.addKeyListener(keyboard);
-	}
-	
-	public void nextLevel(int levelNumber){
-		JFrame win = new JFrame("Next level");				//nouvelle fenêtre appelée next level
-	    win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    win.setResizable(false);
-	    win.getContentPane().setBackground(Color.red);		//couleur du fond
-	    
-	    Font font = new Font("TimesRoman", Font.BOLD, 100);	//police
-	    
-	    JLabel label = new JLabel("YOU LOSE", JLabel.CENTER);//création de ce qui va être affiché
-	    label.setFont(font);
-
-	    win.add(label);										//ajout du label à la fenêtre
-	    
-	    win.setVisible(true);
-	    
-	    try{
-	    	Thread.sleep(3000);
-	    } catch (Exception e){
-	    	e.printStackTrace();
-	    }
-	    
-	    win.setVisible(false);
 	}
 
 	public void gameOver() {

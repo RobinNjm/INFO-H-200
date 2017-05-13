@@ -1,21 +1,25 @@
 package Model;
 
-public class Trap extends UnbreakableBlock{
+public class Trap extends UnbreakableBlock implements Runnable{
 
-	private int hurtValue;
+	private int hurtValue = 1;
+	private int interval = 1000;
+	private Player player;
 	
-	public Trap(int x, int y) {
-		super(x, y, 9);
+	public Trap(int x, int y, Player player) {
+		super(x, y, 14);
+		this.player = player;
 	}
-	
-	public synchronized void hurt(Player player){
-		if (player.isAtPosition(this.posX, this.posY)){
+
+	@Override
+	public void run() {
+		do{
 			player.removeLifes(hurtValue);
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(interval);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
+		}while(player.isAtPosition(this.posX, this.posY));
 	}
 }

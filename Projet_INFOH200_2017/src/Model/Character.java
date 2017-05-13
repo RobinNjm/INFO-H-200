@@ -39,11 +39,15 @@ public abstract class Character extends GameObject implements DamageableObserver
 		boolean obstacle = false;
 		for(GameObject object : game.getGameObjects()){
 			if(object.isAtPosition(nextX, nextY)){
-				if (!(object instanceof PushableBlock)){
+				if (!(object instanceof PushableBlock) && !(object instanceof Trap)){
 					obstacle = object.isObstacle();
 				} else {
 					 if (this instanceof Player){
-						 obstacle = ((PushableBlock) object).move(x, y, caseIsFree(nextX + x, nextY + y, x, y));
+						 if (object instanceof PushableBlock){
+							 obstacle = ((PushableBlock) object).move(x, y, caseIsFree(nextX + x, nextY + y, x, y));
+						 } else {
+							 new Thread ((Trap) object).start();
+						 }
 					 } else{
 						 obstacle = true;
 					 }

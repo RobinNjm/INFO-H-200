@@ -9,7 +9,7 @@ public class Laser extends GameObject implements Runnable{
 		this.game = game;
 	}
 	
-	public boolean setPosition(int x, int y, boolean horizontal){
+	public void setPosition(int x, int y, boolean horizontal){
 		if (!horizontal){
 			color = 13;
 		}
@@ -18,7 +18,6 @@ public class Laser extends GameObject implements Runnable{
 		game.addObject(this);
 		game.notifyView();
 		new Thread(this).start();
-		return true;
 	}
 	
 	@Override
@@ -29,7 +28,7 @@ public class Laser extends GameObject implements Runnable{
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(250);
+			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
