@@ -18,7 +18,7 @@ public class TeleporterItem extends InventoryItem{
 		/*fonction permettant d'utiliser le téléporteur, qui ramène le joueur à la 
 		 * position initiale et recharge une nouvelle map aléatoire
 		 */
-		game.mapBuild();
+		game.mapBuild(player);
 		this.drop();
 	}
 }

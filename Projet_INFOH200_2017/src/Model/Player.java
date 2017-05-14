@@ -106,7 +106,7 @@ public class Player extends Character implements DemisableObserver{
 	public void removeLifes(int hurt){
 		if (!this.isInvulnerable){	//enlève des vies seulement si le joueur n'est pas invulnérable
 			this.lifes = this.lifes - hurt;
-			if(this.lifes == 0){
+			if(this.lifes < 1){
 				game.gameOver();	//jeu terminé si le joueur n'a plus de vie
 			}
 		}

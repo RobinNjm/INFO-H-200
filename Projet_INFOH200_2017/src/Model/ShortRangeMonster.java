@@ -7,7 +7,7 @@ public class ShortRangeMonster extends Monster{
 	private int sightDistance = 5;
 	private int intervalRandom = 500;
 	private int intervalRun = 200;
-	private int intervalKill = 300;	
+	private int intervalKill = 200;	
 	
 	public ShortRangeMonster(int x, int y, int lifes, int attack, Game game) {
 		super(x, y, 2, lifes, attack, game);

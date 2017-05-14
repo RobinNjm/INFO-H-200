@@ -1,6 +1,7 @@
 package Model;
 
 import View.Map;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,24 +27,24 @@ public class Game implements DemisableObserver{
 	public Game(Window window){
 		this.window = window;
 		
-		objects.add(new Player(1,1,5,1, this));	//joueur créé en (1, 1)
+		Player player = new Player(1,1,5,1, this);	//joueur créé en (1, 1) puis ajouté à la liste objects
+		objects.add(player);	
 		window.map.attack = getAttack();
 		
-		mapBuild();
+		mapBuild(player);
 	}
 	
-	public void mapBuild(){
+	public void mapBuild(Player player){
 		/*
 		 * instancie un certain nombre de GameObject qui seront affichés à l'écran
 		 * appelée en chaque début de niveau
 		 */
-		
-		Player player = (Player) objects.get(0);	//joueur sauvé de la liste
+				
 		this.objects.clear();						//liste d'objets remise à 0
 		this.objects.add(player);					//joueur ajouté à la liste
 		
 		player.setPosition(1, 1);					//joueur déplacé en (1, 1) pour le début du niveau
-		
+				
 		window.map.levelNumber += 1;				//niveau affiché à l'écran incrémenté
 		
 		this.objects.addAll(player.inventory.getInventoryObjects());//ajout des objets présents dans l'inventaire à la liste d'objets
@@ -325,4 +326,40 @@ public class Game implements DemisableObserver{
 		}
 		return attack;
 	}
+	
+	/* Tentative de réalisation d'une sauvegarde non concluante
+	 * 
+	private void serializePlayer(Player player){
+		//permet de sauvegarder le joueur et ses attributs
+		 
+		try {
+	        FileOutputStream savingFile = new FileOutputStream("SavedPlayer.ser");
+	        ObjectOutputStream savingPlayer = new ObjectOutputStream(savingFile);
+	        savingPlayer.writeObject(player);
+	        savingPlayer.close();
+	        savingFile.close();
+	    }catch(IOException i) {
+	        i.printStackTrace();
+	    }
+	}
+	
+	private Player deserializePlayer() {
+		//permet de récupérer le joueur sauvegardé
+	
+		Player player = null;
+	    try {
+	        FileInputStream savedFile = new FileInputStream("SavedPlayer.ser");
+	        ObjectInputStream savedPlayer = new ObjectInputStream(savedFile);
+	        player = (Player) savedPlayer.readObject();
+	        player.setGame(this);
+	        savedPlayer.close();
+	        savedFile.close();
+	    }catch(IOException i) {
+	        i.printStackTrace();
+	    }catch(ClassNotFoundException c) {
+	        c.printStackTrace();
+	    }
+	    return player;
+	}
+	*/
 }
