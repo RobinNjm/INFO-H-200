@@ -6,7 +6,6 @@ public class LongRangeMonster extends Monster{
 	private Game game;
 	private int intervalRandom = 500;
 	private int intervalKill = 200;	
-	private Player player;
 	
 	public LongRangeMonster(int x, int y, int lifes, int attack, Game game) {
 		super(x, y, 15, lifes, attack, game);
@@ -56,7 +55,7 @@ public class LongRangeMonster extends Monster{
 		return inSight;	
 	}
 	
-	public void shoot(int deltaX, int deltaY){
+	public void shoot(int deltaX, int deltaY, Player player){
 		/*
 		 * crée les lasers sur les cases où ils peuvent apparaître si le joueur est en vue
 		 * et enlève de la vie au joueur dans le cas où il est toujours présent au bout du laser
@@ -96,7 +95,7 @@ public class LongRangeMonster extends Monster{
 		if (deltaX == 0 || deltaY == 0){	//si le joueur est sur la même ligne
 			if (inSight(deltaX, deltaY)){	//si il n'y a pas d'obstacle entre les deux
 				interval = intervalKill;
-				shoot(deltaX, deltaY);		//tire
+				shoot(deltaX, deltaY, player);		//tire
 			}else{							//obstacle entre le joueur et le monstre
 				interval = intervalRandom;
 				moveRandom();				//mouvement aléatoire
@@ -114,7 +113,7 @@ public class LongRangeMonster extends Monster{
 		try{
 			while (true){	//tourne en boucle tout le temps de vie de l'ennemi
 				ArrayList<GameObject> objects = game.getGameObjects();
-				this.player = ((Player) objects.get(0));
+				Player player = ((Player) objects.get(0));
 				int xPlayer = player.getPosX();
 				int yPlayer = player.getPosY();
 				int xMonster = this.getPosX();
