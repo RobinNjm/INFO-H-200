@@ -140,7 +140,7 @@ public class Map extends JPanel {
 		g.fillRect(700 + 8*tileSize, tileSize, 800, tileSize);			//rectangle à droite de "in use"
 		g.fillRect(700, 6*tileSize, 800, 800);							//rectangle derrière les compteurs de vie, monstre,...
 
-		Font font = new Font("Courier", Font.BOLD, 25); 				//Police d'écriture
+		Font font = new Font("Courier", Font.BOLD, 45-sizeMap); 				//Police d'écriture
 		g.setFont(font);
 		
 		
